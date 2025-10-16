@@ -5,6 +5,7 @@ import SignUp from './components/SignUp';
 import RestaurantList from './components/RestaurantList';
 import UserBookings from './components/UserBookings';
 import BookingForm from './components/BookingForm';
+import { AppBar, Toolbar, Typography, Button, Container, CssBaseline } from '@mui/material';
 import './App.css';
 
 // Initialize Firebase
@@ -13,15 +14,19 @@ import './firebase';
 function App() {
   return (
     <Router>
-      <div className="App">
-        <nav>
-          <ul>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/signup">Sign Up</Link></li>
-            <li><Link to="/">Restaurants</Link></li>
-            <li><Link to="/bookings">My Bookings</Link></li>
-          </ul>
-        </nav>
+      <CssBaseline />
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Restaurant Booking
+          </Typography>
+          <Button color="inherit" component={Link} to="/login">Login</Button>
+          <Button color="inherit" component={Link} to="/signup">Sign Up</Button>
+          <Button color="inherit" component={Link} to="/">Restaurants</Button>
+          <Button color="inherit" component={Link} to="/bookings">My Bookings</Button>
+        </Toolbar>
+      </AppBar>
+      <Container sx={{ mt: 4 }}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
@@ -30,7 +35,7 @@ function App() {
           {/* Example of how to render the booking form for a specific restaurant */}
           <Route path="/book/:restaurantId" element={<BookingFormWrapper />} />
         </Routes>
-      </div>
+      </Container>
     </Router>
   );
 }

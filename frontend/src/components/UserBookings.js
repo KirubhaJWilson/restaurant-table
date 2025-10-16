@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  CircularProgress,
+  Alert,
+  Paper,
+} from '@mui/material';
 
 const UserBookings = () => {
   const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -14,24 +24,40 @@ const UserBookings = () => {
         setBookings(response.data);
       } catch (error) {
         setError('Error fetching bookings');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchBookings();
   }, []);
 
+  if (loading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Alert severity="error">{error}</Alert>;
+  }
+
   return (
-    <div>
-      <h2>Your Bookings</h2>
-      {error && <p>{error}</p>}
-      <ul>
+    <Paper elevation={3} sx={{ p: 2 }}>
+      <Typography variant="h4" component="h2" gutterBottom>
+        Your Bookings
+      </Typography>
+      <List>
         {bookings.map(booking => (
-          <li key={booking.id}>
-            Restaurant ID: {booking.restaurantId}, Table ID: {booking.tableId}, Time: {booking.bookingTime}
-          </li>
+          <ListItem key={booking.id}>
+            <ListItemText
+              primary={`Booking ID: ${booking.id}`}
+              secondary={`Restaurant ID: ${booking.restaurantId}, Table ID: ${booking.tableId}, Time: ${new Date(
+                booking.bookingTime
+              ).toLocaleString()}`}
+            />
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Paper>
   );
 };
 
